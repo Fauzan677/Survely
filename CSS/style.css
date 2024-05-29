@@ -1,0 +1,410 @@
+/* font */
+.lato-light {
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.lato-regular {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.lato-bold {
+  font-family: "Lato", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.lato-black {
+  font-family: "Lato", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.montserrat-reguler {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.montserrat-medium {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.montserrat-semibold {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.montserrat-bold {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.montserrat-black {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.nunito-light {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.nunito-reguler {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.nunito-medium {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.nunito-bold {
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* warna */
+.biru {
+  color: #0093ff;
+}
+
+.oranye {
+  color: #f77a40;
+}
+
+/* nav */
+/* CSS untuk navbar saat di-scroll */
+.navbar-scrolled {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #F5F5F5;
+  z-index: 1000; /* Pastikan navbar berada di atas konten lainnya */
+  box-shadow: none; /* Menghilangkan bayangan */
+  border-bottom: 1px solid black;
+}
+
+.beranda-link {
+  position: relative;
+  display: inline-block;
+  color: #f77a40;
+}
+
+.beranda-link::after {
+  content: "";
+  position: absolute;
+  width: 50%;
+  height: 4px; /* Lebar garis bawah */
+  background-color: #f77a40; /* Warna garis bawah */
+  border-radius: 2px; /* Membuat ujung garis bawah rounded */
+  bottom: -2px; /* Posisikan sedikit di bawah teks */
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.3s ease;
+}
+
+.tombol-biru {
+  background-color: #0093ff;
+  color: white;
+}
+
+.tombol-biru:hover {
+  background-color: #0070C3;
+  color: white;
+}
+
+.tombol-oranye {
+  background-color: #f77a40;
+  color: white;
+}
+
+.tombol-oranye:hover {
+  background-color: #C56234;
+  color: white;
+}
+
+.sentuh-back-oranye {
+  border-radius: 10px;
+}
+
+.sentuh-back-oranye:hover {
+  background-color: #f77a40;
+  border-radius: 10px;
+  color: white;
+  border: none;
+}
+
+.sentuh-col-oranye:hover {
+  color: #f77a40;
+}
+
+/* Opsional: animasi saat hover */
+.beranda-link:hover::after {
+  transform: translateX(-50%) scaleX(1.1); /* Memperbesar garis bawah saat di-hover */
+}
+
+/* header */
+.header p {
+  text-align: justify;
+}
+
+/* tentang */
+.tentang {
+  height: 600px;
+  background-color: #92d6ff;
+}
+
+.tombol-outline-oranye {
+  border: 2px solid #f77a40;
+}
+
+.tombol-outline-oranye:hover {
+  background-color: #0093ff;
+  color: white;
+}
+
+/* kategori */
+.kategori {
+  cursor: pointer;
+}
+
+.kartu-kategori:hover {
+  background-color: #f5f5f5;
+}
+
+/* footer */
+.footer {
+  background-color: #f77a40;
+  height: 280px;
+}
+
+.footer ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+
+.footer hr {
+  width: 50%;
+  border-width: 2px;
+  color: white;
+}
+
+/* register.php */
+.form-floating.password {
+  position: relative;
+}
+.form-floating.password .form-control {
+  padding-right: 2.5rem;
+}
+.form-floating.password .fa-eye, .form-floating .fa-eye-slash {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* nav Dashboard */
+.dashboard .form-control {
+  background: url("../img/search.png") no-repeat right 10px center;
+  background-size: 20px;
+  background-position-x: 95%;
+}
+
+.dashboard span.border {
+  height: 35px;
+  line-height: 10px;
+  margin-top: 5px;
+}
+
+.dashboard span.lato-bold {
+  line-height: 30px;
+}
+
+/* dashboard menu */
+.menu a {
+  display: block;
+  border-radius: 10px;
+  color: black;
+}
+
+.menu a.menu-aktif {
+   background-color: #0093ff;
+   color: white;
+}
+
+.menu a:hover {
+  background-color: #0093ff;
+  color: white;
+}
+
+/* dashboard home */
+.post .card button.koin {
+  height: 30px;
+}
+
+.kecil {
+  font-size: 70%;
+}
+
+.sentuh-back-biru {
+  border-radius: 10px;
+}
+
+.sentuh-back-biru:hover {
+  background-color: #0093ff;
+  border-radius: 10px;
+  color: white;
+  border: none;
+}
+
+/* dashboard pertanyaan lain */
+.pertanyaanLangsung span {
+  font-size: 80%;
+}
+
+.pertanyaanLangsung span.kecil {
+  font-size: 60%;
+}
+
+.pertanyaanLangsung button {
+  background-color: #f77a40;
+  border-radius: 10px;
+  border: #f77a40;
+  font-size: 70%;
+  color: white;
+  width: 60px;
+  height: 30px;
+}
+
+.pertanyaanLangsung .keterangan div {
+  margin-top: -10px;
+}
+
+/* tambah.php */
+.tambah .btn {
+  position: relative;
+  border: none;
+  background: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tambah .btn:focus {
+  outline: none; /* Hilangkan outline default */
+}
+
+.tambah .btn::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px; /* Sesuaikan dengan jarak underline dari teks */
+  width: 100%;
+  height: 2px; /* Ketebalan underline */
+  background-color: gray; /* Warna underline */
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+.tambah .btn:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.pilihan {
+  width: fit-content;
+}
+
+/* jawab.php */
+.pertanyaanLain {
+  cursor: pointer;
+}
+
+.pertanyaanLain button {
+  height: 20px;
+}
+
+.pertanyaanLain span {
+  font-size: 80%;
+}
+
+.pertanyaanLain span.kecil {
+  font-size: 60%;
+}
+
+/* profil.php */
+.vertical-hr {
+  width: 2px;
+  height: 50px;
+  background-color: black;
+  border: none;
+}
+
+.follow span {
+  font-size: 70%;
+}
+
+.follow span.kecil {
+  font-size: 60%;
+}
+
+.follow .keterangan {
+  height: 25px;
+  padding: 1px 5px;
+  font-size: small;
+  cursor: pointer;
+}
+
+.pertanyaan span {
+  font-size: 70%;
+}
+
+.pertanyaan span.kecil {
+  font-size: 60%;
+}
+
+.pertanyaan .koin {
+  height: 25px;
+  width: 40px;
+}
+
+.pertanyaan .keterangan {
+  font-size: small;
+}
+
+.perintah button {
+  height: 30px;
+}
+
+/* koin.php */
+.koinReward .besar {
+  font-size: large;
+}
