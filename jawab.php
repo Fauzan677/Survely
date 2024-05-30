@@ -8,6 +8,10 @@ if (!isset($_SESSION['user_id'])) {
 
 if (isset($_GET['post_id'])) {
     $post_id = $_GET['post_id'];
+    $dataOpsi = getOpsiStats($post_id);
+
+    // Convert data to JSON for JavaScript
+    $dataOpsiJson = json_encode($dataOpsi);
 } else {
     // Tangani jika post_id tidak disediakan di URL.
     echo "Post ID tidak ditemukan.";
@@ -24,9 +28,10 @@ if (isset($_POST['jawab']) && isset($_POST['opsi'])) {
     $opsi_id = $_POST['opsi'];
     $user_id = $_SESSION['user_id'];
     $post_id = $_GET['post_id'];
+    $koin = $data[0]['koin'];
 
     // Panggil fungsi untuk menyimpan jawaban
-    if (simpanJawaban($user_id, $post_id, $opsi_id)) {
+    if (simpanJawaban($user_id, $post_id, $opsi_id, $koin)) {
         // Redirect ke halaman dashboard.php jika jawaban berhasil disimpan
         header("Location: dashboard.php");
         exit(); // Pastikan tidak ada kode berikutnya yang dieksekusi setelah redirect
@@ -44,6 +49,7 @@ if (isset($_POST['jawab']) && isset($_POST['opsi'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Menjawab</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 
@@ -131,6 +137,13 @@ if (isset($_POST['jawab']) && isset($_POST['opsi'])) {
                         </div>
                     </div>
                 <?php endforeach; ?>
+                <?php if ($data[0]['user_id'] == $_SESSION['user_id']) : ?>
+                    <div class="card my-3 ms-3">
+                        <div class="card-body">
+                            <canvas id="myChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="col-lg-4">
                 <div class="card mt-5">
@@ -167,7 +180,52 @@ if (isset($_POST['jawab']) && isset($_POST['opsi'])) {
     </div>
 
 
+    <script>
+        // Get data from PHP
+        var dataOpsi = <?php echo $dataOpsiJson; ?>;
 
+        // Prepare data for Chart.js
+        var labels = dataOpsi.map(function(e) {
+            return e.opsi;
+        });
+        var data = dataOpsi.map(function(e) {
+            return e.jumlah;
+        });
+
+        // Define the two colors
+        var colors = ['#F77A40', '#0093FF'];
+
+        // Generate arrays of colors for each bar
+        var backgroundColors = data.map(function(_, index) {
+            return colors[index % colors.length];
+        });
+        var borderColors = backgroundColors.map(function(color) {
+            return color;
+        });
+
+        // Create a bar chart
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Jumlah Jawaban',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 

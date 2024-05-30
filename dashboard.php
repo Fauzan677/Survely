@@ -92,7 +92,7 @@ if ($kategoriTerpilih == 'Semua') {
                                         <img src="img/koin.png" alt="" width="20">
                                         <span class="ms-1 nunito-bold"><?php echo $d['koin']; ?></span>
                                     </button>
-                                    <img src="img/radioButton.png" class="mt-1 ms-2 me-1" width="15px" height="15px">
+                                    <img src="img/radioButton.png" class="mt-2 ms-2 me-1" width="15px" height="15px">
                                     <p><?php echo $d['jenis_opsi']; ?></p>
                                 </div>
                                 <img src="img/more.png" alt="" height="24px" width="24px">

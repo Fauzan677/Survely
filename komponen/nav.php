@@ -1,3 +1,10 @@
+<?php
+
+$user_id = $_SESSION['user_id'];
+$koin = ambilKoinReward($user_id); // Panggil fungsi untuk mendapatkan nilai koin
+
+?>
+
 <nav class="navbar dashboard navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid py-2">
         <a href="dashboard.php">
@@ -15,7 +22,7 @@
                     <img src="img/koin.png" alt="" width="25px">
                 </span>
                 <span class="navbar-text lato-bold">
-                    3685
+                    <?php echo $koin['koin']; ?>
                 </span>
                 <a class="nav-link me-3" href="#">
                     <img src="img/refresh.png" alt="" width="15px">

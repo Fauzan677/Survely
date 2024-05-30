@@ -27,7 +27,7 @@ function daftar($data)
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // Buat query untuk insert data
-        $sql = "INSERT INTO pengguna (username, email, tgl_lahir, password) VALUES ('$username', '$email', '$tglLahir', '$hashedPassword')";
+        $sql = "INSERT INTO pengguna (username, email, tgl_lahir, password, reward) VALUES ('$username', '$email', '$tglLahir', '$hashedPassword', 50)";
 
         $conn->query($sql);
         return $conn->affected_rows;
@@ -78,7 +78,7 @@ function tambah($data)
     $umur = htmlspecialchars(trim($data['umur']), ENT_QUOTES);
     $orang = htmlspecialchars(trim($data['orang']), ENT_QUOTES);
     $user_id = $_SESSION['user_id'];
-    if( isset($data['opsi']) ) {
+    if (isset($data['opsi'])) {
         $opsi = $data['opsi']; // Ini akan menjadi array berisi nilai input opsi
     }
 
@@ -86,6 +86,9 @@ function tambah($data)
     if (empty($pertanyaan) || empty($jenisOpsi) || empty($kategori) || empty($jenisKoin) || empty($koin) || empty($umur) || empty($orang) || empty($opsi)) {
         return -1;
     }
+
+    // Mulai transaksi database
+    $conn->begin_transaction();
 
     // Buat query SQL untuk memasukkan data ke dalam tabel postingan
     $sql_postingan = "INSERT INTO postingan 
@@ -102,43 +105,44 @@ function tambah($data)
             $conn->query($sqlOpsi);
         }
 
-        return TRUE;
+        // Kurangi koin dari pengguna
+        $totalKoin = intval($koin) * intval($orang);
+        $sql_update_koin = "UPDATE pengguna SET koin = koin - $totalKoin WHERE user_id = $user_id";
+        $result_update_koin = $conn->query($sql_update_koin);
+
+        // Periksa hasil pembaruan koin
+        if ($result_update_koin) {
+            // Commit transaksi jika semua operasi berhasil
+            $conn->commit();
+            return TRUE;
+        } else {
+            // Rollback transaksi jika ada operasi yang gagal
+            $conn->rollback();
+            return FALSE;
+        }
     } else {
+        // Rollback transaksi jika gagal memasukkan data postingan
+        $conn->rollback();
         return FALSE;
     }
 }
 
-function ambilData($data, $id = null)
+function ambilKoinReward($userId)
 {
-    global $conn;
+    global $conn; // Gunakan koneksi global
 
-    // Buat kueri SQL dasar
-    $sql = "SELECT * FROM $data";
+    // Query untuk mengambil nilai koin dan reward
+    $query = "SELECT koin, reward FROM pengguna WHERE user_id = $userId";
+    $result = mysqli_query($conn, $query);
 
-    // Tambahkan filter WHERE jika ID disediakan
-    if ($id !== null) {
-        $id = intval($id); // Pastikan ID adalah integer untuk keamanan
-        $sql .= " WHERE id = $id";
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $koin = $row['koin'] !== null ? $row['koin'] : 0; // Jika NULL, kembalikan 0
+        $reward = $row['reward'] !== null ? $row['reward'] : 0; // Jika NULL, kembalikan 0
+        return ['koin' => $koin, 'reward' => $reward];
+    } else {
+        return ['koin' => 0, 'reward' => 0]; // Default value if no koin or reward is found
     }
-
-    // Jalankan kueri SQL
-    $result = $conn->query($sql);
-
-    // Periksa jika kueri berhasil dieksekusi
-    if ($result === FALSE) {
-        return FALSE; // Kembalikan FALSE jika terjadi kesalahan
-    }
-
-    // Buat array untuk menyimpan hasil query
-    $data = array();
-
-    // Ambil setiap baris hasil query dan masukkan ke dalam array
-    while ($row = $result->fetch_assoc()) {
-        $data[] = $row;
-    }
-
-    // Kembalikan array yang berisi hasil query
-    return $data;
 }
 
 function dataDashboard($whereColumn = null, $whereValue = null)
@@ -193,7 +197,8 @@ function dataDashboard($whereColumn = null, $whereValue = null)
 
 date_default_timezone_set('Asia/Jakarta');
 
-function waktuBerlalu($waktu) {
+function waktuBerlalu($waktu)
+{
     $waktu = strtotime($waktu);
     $selisih = time() - $waktu;
 
@@ -220,7 +225,8 @@ function waktuBerlalu($waktu) {
     }
 }
 
-function potongTeks($text, $maxLength) {
+function potongTeks($text, $maxLength)
+{
     if (strlen($text) > $maxLength) {
         return substr($text, 0, $maxLength) . "...";
     } else {
@@ -228,7 +234,8 @@ function potongTeks($text, $maxLength) {
     }
 }
 
-function hitungJawabanDariPostId($postId) {
+function hitungJawabanDariPostId($postId)
+{
     global $conn;
     $sql = "SELECT COUNT(*) AS total FROM jawaban WHERE post_id = ?";
     $stmt = $conn->prepare($sql);
@@ -239,7 +246,8 @@ function hitungJawabanDariPostId($postId) {
     return $row['total'];
 }
 
-function simpanJawaban($user_id, $post_id, $opsi_id) {
+function simpanJawaban($user_id, $post_id, $opsi_id, $koin)
+{
     global $conn;
 
     // Siapkan kueri SQL INSERT
@@ -247,26 +255,116 @@ function simpanJawaban($user_id, $post_id, $opsi_id) {
 
     // Jalankan kueri SQL
     if ($conn->query($sql) === TRUE) {
-        return true;
+        // Jika berhasil memasukkan jawaban, update kolom koin pada tabel pengguna
+        $updateKoinSql = "UPDATE pengguna SET koin = IFNULL(koin, 0) + $koin WHERE user_id = $user_id";
+        if ($conn->query($updateKoinSql) === TRUE) {
+            return true;
+        } else {
+            // Gagal mengupdate koin, Anda dapat mengembalikan false atau menambahkan logging untuk menangani kesalahan
+            return false;
+        }
     } else {
         return false;
     }
 }
 
-function sudahMenjawab($post_id, $user_id) {
+function sudahMenjawab($post_id, $user_id)
+{
     global $conn;
-    
+
     $post_id = (int)$post_id;
     $user_id = (int)$user_id;
-    
+
     $sql = "SELECT COUNT(*) as count FROM jawaban WHERE post_id = $post_id AND user_id = $user_id";
     $result = $conn->query($sql);
-    
+
     if ($result === FALSE) {
         return FALSE; // Atau tangani kesalahan sesuai kebutuhan Anda
     }
-    
+
     $row = $result->fetch_assoc();
-    
+
     return $row['count'] > 0;
+}
+
+function beliKoin($userId, $jumlah, $sumberDana, $total)
+{
+    global $conn;
+
+    // Query untuk memasukkan data ke tabel beli_koin
+    $query = "INSERT INTO beli_koin (user_id, jumlah, sumber_dana, total) VALUES ('$userId', '$jumlah', '$sumberDana', '$total')";
+
+    if ($conn->query($query) === TRUE) {
+        // Mengupdate kolom koin di tabel pengguna
+        $queryUpdate = "UPDATE pengguna SET koin = IFNULL(koin, 0) + $jumlah WHERE user_id = $userId";
+        if ($conn->query($queryUpdate) === TRUE) {
+            return true; // Berhasil membeli koin dan mengupdate koin
+        } else {
+            return false; // Gagal mengupdate koin
+        }
+    } else {
+        return false; // Gagal memasukkan data ke tabel beli_koin
+    }
+}
+
+// Function to handle coin withdrawal
+function tarikKoin($userId, $jumlah, $sumberDana, $rekeningTujuan, $total) {
+    global $conn;
+
+    // Start a database transaction
+    $conn->begin_transaction();
+
+    // Insert data into tarik_koin table
+    $queryTarikKoin = "INSERT INTO tarik_koin (user_id, jumlah, sumber_dana, rekening_tujuan, total) 
+                       VALUES ('$userId', '$jumlah', '$sumberDana', '$rekeningTujuan', '$total')";
+
+    // Update koin in pengguna table
+    $queryUpdateKoin = "UPDATE pengguna SET koin = koin - $jumlah WHERE user_id = $userId";
+
+    // Perform both queries
+    $resultTarikKoin = $conn->query($queryTarikKoin);
+    $resultUpdateKoin = $conn->query($queryUpdateKoin);
+
+    // Check if both queries were successful
+    if ($resultTarikKoin && $resultUpdateKoin) {
+        // Commit the transaction
+        $conn->commit();
+        return true; // Successfully completed transaction
+    } else {
+        // Rollback the transaction
+        $conn->rollback();
+        return false; // Failed to complete transaction
+    }
+}
+
+function getOpsiStats($post_id) {
+    global $conn;
+    
+    // Sanitize the input
+    $post_id = $conn->real_escape_string($post_id);
+
+    // Create the SQL query
+    $sql = "
+        SELECT j.opsi_id, o.opsi, COUNT(j.opsi_id) AS jumlah
+        FROM jawaban j
+        JOIN opsi o ON j.opsi_id = o.opsi_id
+        WHERE j.post_id = '$post_id'
+        GROUP BY j.opsi_id, o.opsi
+    ";
+
+    // Execute the query
+    $result = $conn->query($sql);
+
+    // Check if the query was successful
+    if ($result === FALSE) {
+        return FALSE;
+    }
+
+    // Fetch all results into an associative array
+    $data = array();
+    while ($row = $result->fetch_assoc()) {
+        $data[] = $row;
+    }
+
+    return $data;
 }

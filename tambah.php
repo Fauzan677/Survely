@@ -7,19 +7,29 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 if (isset($_POST['tanya'])) {
-    if (tambah($_POST) > 0) {
-        header("Location: dashboard.php");
-        exit;
-    } else if (tambah($_POST) === -1) {
-        $_SESSION['flash_message'] = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Semua field harus diisi';
-        $_SESSION['input_values'] = $_POST;
+    $totalKoin = intval($_POST['koin']) * intval($_POST['orang']);
+    $koin = ambilKoinReward($_SESSION['user_id']);
+    if ($totalKoin <= $koin['koin']) {
+        if (tambah($_POST) > 0) {
+            header("Location: dashboard.php");
+            exit;
+        } else if (tambah($_POST) === -1) {
+            $_SESSION['flash_message'] = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Semua field harus diisi';
+            $_SESSION['input_values'] = $_POST;
+        } else {
+            // Jika login gagal, tampilkan pesan error
+            $_SESSION['flash_message'] = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Error';
+            $_SESSION['input_values'] = $_POST;
+        }
     } else {
         // Jika login gagal, tampilkan pesan error
         $_SESSION['flash_message'] = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
-            Error';
+            Jumlah koin tidak mencukupi';
         $_SESSION['input_values'] = $_POST;
     }
+   
 }
 
 // Mengambil nilai dari session jika ada

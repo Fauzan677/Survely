@@ -1,3 +1,7 @@
+<?php
+require 'function.php';
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -40,32 +44,32 @@
                 </div>
 
                 <nav class="nav flex-column">
-                    <a class="nav-link montserrat-medium menu-aktif" href="#">
+                    <a class="nav-link montserrat-medium menu-aktif mb-1" href="#">
                         <img src="img/all.png" alt="">
                         Profil
                     </a>
-                    <a class="nav-link montserrat-medium" href="#">
+                    <a class="nav-link montserrat-medium mb-1" href="#">
                         <img src="img/kesehatan.png" alt="" width="24px">
                         Pertanyaan
                     </a>
-                    <a class="nav-link montserrat-medium" href="#">
+                    <a class="nav-link montserrat-medium mb-1" href="#">
                         <img src="img/pendidikan.png" alt="" width="24px">
                         Jawaban
                     </a>
-                    <a class="nav-link montserrat-medium" href="koin.php">
+                    <a class="nav-link montserrat-medium mb-1" href="koin.php">
                         <img src="img/keuangan.png" alt="" width="24px">
                         Koinku
                     </a>
-                    <a class="nav-link montserrat-medium" href="#">
-                        <img src="img/keuangan.png" alt="" width="24px">
+                    <a class="nav-link montserrat-medium mb-1" href="#">
+                        <img src="img/analisis.png" alt="" width="24px">
                         Analisis
                     </a>
-                    <a class="nav-link montserrat-medium" href="#">
-                        <img src="img/keuangan.png" alt="" width="24px">
+                    <a class="nav-link montserrat-medium mb-1" href="#">
+                        <img src="img/bantuan.png" alt="" width="24px">
                         Bantuan
                     </a>
-                    <a class="nav-link montserrat-medium" href="#">
-                        <img src="img/keuangan.png" alt="" width="24px">
+                    <a class="nav-link montserrat-medium" href="keluar.php">
+                        <img src="img/keluar.png" alt="" width="24px">
                         Keluar
                     </a>
                 </nav>
