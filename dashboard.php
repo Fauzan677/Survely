@@ -76,6 +76,12 @@ if ($kategoriTerpilih == 'Semua') {
                     </button>
                 </div>
                 <hr>
+                <?php if (isset($_SESSION['flash_message_beli'])) :
+                    echo $_SESSION['flash_message_beli'];
+                    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>';
+                    unset($_SESSION['flash_message_beli']);
+                endif; ?>
                 <?php foreach ($data as $d) : ?>
                     <div class="card mb-3">
                         <div class="card-body">
@@ -95,7 +101,16 @@ if ($kategoriTerpilih == 'Semua') {
                                     <img src="img/radioButton.png" class="mt-2 ms-2 me-1" width="15px" height="15px">
                                     <p><?php echo $d['jenis_opsi']; ?></p>
                                 </div>
-                                <img src="img/more.png" alt="" height="24px" width="24px">
+                                <?php if ($d['user_id'] == $_SESSION['user_id']) : ?>
+                                    <div class="btn-group dropend">
+                                        <img src="img/more.png" data-bs-toggle="dropdown" alt="" height="24px" width="24px">
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="hapus_postingan.php?post_id=<?php echo $d['post_id']; ?>"  onclick="return confirm('Apakah Anda yakin ingin menghapus postingan ini?');">Hapus Postingan</a></li>
+                                        </ul>
+                                    </div>
+                                <?php else : ?>
+                                    <img src="img/more.png" data-bs-toggle="dropdown" alt="" height="24px" width="24px">
+                                <?php endif; ?>
                             </div>
                             <p class="lato-light ms-5"><?php echo potongTeks($d['pertanyaan'], 60); ?></p>
                             </p>
@@ -116,6 +131,7 @@ if ($kategoriTerpilih == 'Semua') {
                         </div>
                     </div>
                 <?php endforeach; ?>
+
             </div>
             <div class="col-lg-3">
                 <div class="card mt-5">
@@ -151,8 +167,6 @@ if ($kategoriTerpilih == 'Semua') {
             </div>
         </div>
     </div>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

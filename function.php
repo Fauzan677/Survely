@@ -368,3 +368,41 @@ function getOpsiStats($post_id) {
 
     return $data;
 }
+
+function hapusPostingan($post_id) {
+    global $conn;
+
+    // Sanitize the input
+    $post_id = $conn->real_escape_string($post_id);
+
+    // Start transaction
+    $conn->begin_transaction();
+
+    try {
+        // Delete from opsi table
+        $sqlOpsi = "DELETE FROM opsi WHERE post_id = '$post_id'";
+        if (!$conn->query($sqlOpsi)) {
+            throw new Exception("Error deleting from opsi: " . $conn->error);
+        }
+
+        // Delete from jawaban table (if exists)
+        $sqlJawaban = "DELETE FROM jawaban WHERE post_id = '$post_id'";
+        if (!$conn->query($sqlJawaban)) {
+            throw new Exception("Error deleting from jawaban: " . $conn->error);
+        }
+
+        // Delete from postingan table
+        $sqlPostingan = "DELETE FROM postingan WHERE post_id = '$post_id'";
+        if (!$conn->query($sqlPostingan)) {
+            throw new Exception("Error deleting from postingan: " . $conn->error);
+        }
+
+        // Commit transaction
+        $conn->commit();
+        return true;
+    } catch (Exception $e) {
+        // Rollback transaction in case of error
+        $conn->rollback();
+        return false;
+    }
+}
