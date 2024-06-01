@@ -3,8 +3,13 @@ require 'function.php';
 
 $koins = ambilKoinReward($_SESSION['user_id']);
 
+$user_id = $_SESSION['user_id'];
+
+$data = ambilUserDariId($user_id);
+$jumlahPertanyaan = hitungKolom('postingan', 'user_id', $user_id);
+$jumlahJawaban = hitungKolom('jawaban', 'user_id', $user_id);
+
 if (isset($_POST['beli'])) {
-    $userId = $_SESSION['user_id'];
     $jumlah = $conn->real_escape_string($_POST['jumlahBeli']);
     $sumberDana = $conn->real_escape_string($_POST['sumberBeli']);
     $total = $conn->real_escape_string($_POST['totalBeli']);
@@ -12,7 +17,7 @@ if (isset($_POST['beli'])) {
     // Validasi data yang dikirim
     if (!empty($jumlah) && !empty($sumberDana) && !empty($total)) {
         // Memanggil fungsi untuk membeli koin dan mengupdate koin pengguna
-        if (beliKoin($userId, $jumlah, $sumberDana, $total)) {
+        if (beliKoin($user_id, $jumlah, $sumberDana, $total)) {
             $_SESSION['flash_message_beli'] = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                 Pembelian koin berhasil';
         } else {
@@ -24,7 +29,6 @@ if (isset($_POST['beli'])) {
             Semua field harus diisi';
     }
 } elseif (isset($_POST['tarik'])) {
-    $userId = $_SESSION['user_id'];
     $jumlah = $conn->real_escape_string($_POST['jumlahTarik']);
     $sumberDana = $conn->real_escape_string($_POST['sumberTarik']);
     $rekeningTujuan = $conn->real_escape_string($_POST['rekening']);
@@ -34,7 +38,7 @@ if (isset($_POST['beli'])) {
     if (!empty($jumlah) && !empty($sumberDana) && !empty($rekeningTujuan) && !empty($total)) {
         // Call the function to handle coin withdrawal
         if ($jumlah <= $koins['koin']) {
-            if (tarikKoin($userId, $jumlah, $sumberDana, $rekeningTujuan, $total)) {
+            if (tarikKoin($user_id, $jumlah, $sumberDana, $rekeningTujuan, $total)) {
                 $_SESSION['flash_message_tarik'] = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                     Penarikan koin berhasil';
             } else {
@@ -58,7 +62,7 @@ if (isset($_POST['beli'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard</title>
+    <title>Survely | Koin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="CSS/style.css">
 </head>
@@ -74,27 +78,27 @@ if (isset($_POST['beli'])) {
                 <div class="row mt-3">
                     <div class="col text-center">
                         <img src="img/profileAbu.png" alt="" width="100px" height="100px" class="mb-2">
-                        <p class="lato-bold">Fauzan Najib H</p>
+                        <p class="lato-bold"><?php echo $data['username'];?></p>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-5 text-center">
                         <p class="lato-light">Pertanyaan</p>
-                        <p class="lato-bold">12</p>
+                        <p class="lato-bold"><?php echo $jumlahPertanyaan;?></p>
                     </div>
                     <div class="col-lg-2 d-flex justify-content-center">
                         <hr class="vertical-hr">
                     </div>
                     <div class="col-lg-5 text-center">
                         <p class="lato-light">Jawaban</p>
-                        <p class="lato-bold">12</p>
+                        <p class="lato-bold"><?php echo $jumlahJawaban;?></p>
                     </div>
                     <hr class="mx-auto w-75">
                 </div>
 
                 <nav class="nav d-flex flex-column">
-                    <a class="nav-link montserrat-medium" href="#">
+                    <a class="nav-link montserrat-medium" href="profil.php">
                         <img src="img/all.png" alt="">
                         Profil
                     </a>

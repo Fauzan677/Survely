@@ -78,11 +78,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .classList.add("beranda-link");
     }
 
-    // Menambahkan kelas beranda-link ke link "Kontak" jika scroll telah mencapai posisi maksimal
-    if (scrollPosition === maxScroll) {
-      document.querySelector('a[href="#kontak"]').classList.add("beranda-link");
-    }
-
     // Menambahkan kelas beranda-link ke link yang sedang aktif
     navLinks.forEach((link) => {
       const href = link.getAttribute("href").substring(1); // Menghilangkan tanda "#" dari href
@@ -90,6 +85,11 @@ document.addEventListener("DOMContentLoaded", function () {
         link.classList.add("beranda-link");
       }
     });
+    
+    // Menambahkan kelas beranda-link ke link "Kontak" jika scroll telah mencapai posisi maksimal
+    if (scrollPosition === maxScroll) {
+      document.querySelector('a[href="#kontak"]').classList.add("beranda-link");
+    }
     
     // Menghapus kelas beranda-link dari link "Kategori" jika scroll telah mencapai posisi maksimal
     if (scrollPosition === maxScroll) {

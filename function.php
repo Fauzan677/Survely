@@ -406,3 +406,48 @@ function hapusPostingan($post_id) {
         return false;
     }
 }
+
+function ambilUserDariId($user_id) {
+    global $conn;
+
+    // Sanitasi input untuk menghindari SQL injection
+    $user_id = $conn->real_escape_string($user_id);
+
+    // Buat kueri SQL untuk mengambil data pengguna
+    $sql = "SELECT * FROM pengguna WHERE user_id = '$user_id'";
+
+    // Jalankan kueri
+    $result = $conn->query($sql);
+
+    // Periksa jika kueri berhasil dieksekusi
+    if ($result && $result->num_rows > 0) {
+        // Ambil data pengguna
+        return $result->fetch_assoc();
+    } else {
+        return false; // Jika pengguna tidak ditemukan atau terjadi kesalahan
+    }
+}
+
+function hitungKolom($tableName, $columnName, $userId) {
+    global $conn;
+
+    // Sanitasi input untuk menghindari SQL injection
+    $tableName = $conn->real_escape_string($tableName);
+    $columnName = $conn->real_escape_string($columnName);
+    $userId = $conn->real_escape_string($userId);
+
+    // Buat kueri SQL untuk menghitung jumlah kolom dengan kondisi WHERE user_id
+    $sql = "SELECT COUNT($columnName) as total FROM $tableName WHERE user_id = '$userId'";
+
+    // Jalankan kueri
+    $result = $conn->query($sql);
+
+    // Periksa jika kueri berhasil dieksekusi
+    if ($result && $result->num_rows > 0) {
+        // Ambil hasil perhitungan
+        $row = $result->fetch_assoc();
+        return $row['total'];
+    } else {
+        return 0; // Jika terjadi kesalahan atau tabel/kolom tidak ditemukan
+    }
+}

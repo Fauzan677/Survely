@@ -47,7 +47,7 @@ if (isset($_POST['jawab']) && isset($_POST['opsi'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Menjawab</title>
+    <title>Survely | Menjawab</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="CSS/style.css">
@@ -64,22 +64,18 @@ if (isset($_POST['jawab']) && isset($_POST['opsi'])) {
                 <h2 class="lato-bold biru text-center mt-4">CATEGORI</h2>
                 <hr>
                 <nav class="nav flex-column">
-                    <a class="nav-link montserrat-medium mb-1" href="#">
+                    <a class="nav-link montserrat-medium mb-1" href="dashboard.php?kategori=Semua">
                         <img src="img/all.png" alt="">
                         Semua
                     </a>
                     <?php foreach ($data as $d) : ?>
-                        <a href="#" class="nav-link montserrat-medium mb-1 <?php echo $d['nama_kategori'] == 'Kesehatan' ? 'menu-aktif' : '' ?>">
+                        <a href="dashboard.php?kategori=Kesehatan" class="nav-link montserrat-medium mb-1 <?php echo $d['nama_kategori'] == 'Kesehatan' ? 'menu-aktif' : '' ?>">
                             <img src="img/kesehatan.png" alt="" width="24px">
                             Kesehatan
                         </a>
-                        <a href="#" class="nav-link montserrat-medium mb-1 <?php echo $d['nama_kategori'] == 'Pendidikan' ? 'menu-aktif' : '' ?>">
+                        <a href="dashboard.php?kategori=Pendidikan" class="nav-link montserrat-medium mb-1 <?php echo $d['nama_kategori'] == 'Pendidikan' ? 'menu-aktif' : '' ?>">
                             <img src="img/pendidikan.png" alt="" width="24px">
                             Pendidikan
-                        </a>
-                        <a class="nav-link montserrat-medium mb-1" href="#">
-                            <img src="img/keuangan.png" alt="" width="24px">
-                            Keuangan
                         </a>
                     <?php endforeach; ?>
                 </nav>

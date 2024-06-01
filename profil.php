@@ -1,5 +1,17 @@
 <?php
 require 'function.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+
+
+$data = ambilUserDariId($user_id);
+$jumlahPertanyaan = hitungKolom('postingan', 'user_id', $user_id);
+$jumlahJawaban = hitungKolom('jawaban', 'user_id', $user_id);
 ?>
 
 <!doctype html>
@@ -8,7 +20,7 @@ require 'function.php';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard</title>
+    <title>Survely | Profil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="CSS/style.css">
 </head>
@@ -24,21 +36,21 @@ require 'function.php';
                 <div class="row mt-3">
                     <div class="col text-center">
                         <img src="img/profileAbu.png" alt="" width="100px" height="100px" class="mb-2">
-                        <p class="lato-bold">Fauzan Najib H</p>
+                        <p class="lato-bold"><?php echo $data['username'];?></p>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-lg-5 text-center">
                         <p class="lato-light">Pertanyaan</p>
-                        <p class="lato-bold">12</p>
+                        <p class="lato-bold"><?php echo $jumlahPertanyaan;?></p>
                     </div>
                     <div class="col-lg-2 d-flex justify-content-center">
                         <hr class="vertical-hr">
                     </div>
                     <div class="col-lg-5 text-center">
                         <p class="lato-light">Jawaban</p>
-                        <p class="lato-bold">12</p>
+                        <p class="lato-bold"><?php echo $jumlahJawaban;?></p>
                     </div>
                     <hr class="mx-auto w-75">
                 </div>
@@ -83,23 +95,23 @@ require 'function.php';
                                 <h3 class="lato-bold mb-4">Tentang</h3>
                                 <div class="d-flex flex-row border-bottom">
                                     <img src="img/user.svg" alt="" width="30px" height="30px">
-                                    <p class="ms-3 lato-regular">Pria</p>
+                                    <p class="ms-3 lato-regular"><?php echo ($data['jenis_kelamin']) ? $data['jenis_kelamin'] : '...';?></p>
                                 </div>
                                 <div class="d-flex flex-row border-bottom mt-3">
                                     <img src="img/birthday.svg" alt="" width="30px" height="30px">
-                                    <p class="ms-3 lato-regular">12 Maret 2003</p>
+                                    <p class="ms-3 lato-regular"><?php echo ($data['tgl_lahir']) ? $data['tgl_lahir'] : '...';?></p>
                                 </div>
                                 <div class="d-flex flex-row border-bottom mt-3">
                                     <img src="img/location.svg" alt="" width="30px" height="30px">
-                                    <p class="ms-3 lato-regular">Yogyakarta, DI Yogyakarta</p>
+                                    <p class="ms-3 lato-regular"><?php echo ($data['lokasi']) ? $data['lokasi'] : '...';?></p>
                                 </div>
                                 <div class="d-flex flex-row border-bottom mt-3">
                                     <img src="img/mail.svg" alt="" width="30px" height="30px">
-                                    <p class="ms-3 lato-regular">fauzanajib@gmail.com</p>
+                                    <p class="ms-3 lato-regular"><?php echo ($data['email']) ? $data['email'] : '...';?></p>
                                 </div>
                                 <div class="d-flex flex-row border-bottom mt-3">
                                     <img src="img/phone.svg" alt="" width="30px" height="30px">
-                                    <p class="ms-3 lato-regular">08123456789</p>
+                                    <p class="ms-3 lato-regular"><?php echo ($data['no_telepon']) ? $data['no_telepon'] : '...';?></p>
                                 </div>
                                 <div class="mt-3 ms-5">
                                     <button type="button" class="btn tombol-biru">Verifikasi</button>

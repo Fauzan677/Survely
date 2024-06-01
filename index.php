@@ -247,15 +247,15 @@ if (isset($_SESSION['user_id'])) {
                 <p class="lato-bold">KONTAK</p>
                 <ul>
                     <li>
-                        <img src="img/location.svg" class="me-3 kategori" alt="">
+                        <img src="img/lokasi_putih.png" class="me-3 kategori" alt="">
                         Yogyakarta
                     </li>
                     <li class="mt-2">
-                        <img src="img/phone.svg" class="me-3 kategori" alt="">
+                        <img src="img/phone_putih.png" class="me-3 kategori" alt="">
                         08123456789
                     </li>
                     <li class="mt-2">
-                        <img src="img/mail.svg" class="me-3 kategori" alt="">
+                        <img src="img/mail_putih.png" class="me-3 kategori" alt="">
                         Survely@gmail.com
                     </li>
                 </ul>
