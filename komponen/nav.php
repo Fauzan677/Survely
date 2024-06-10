@@ -36,7 +36,7 @@ $koin = ambilKoinReward($user_id); // Panggil fungsi untuk mendapatkan nilai koi
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="profil.php">Profil</a></li>
-                        <li><a class="dropdown-item" href="keluar.php">Keluar</a></li>
+                        <li><a class="dropdown-item" href="keluar.php" onclick="return confirm('Apakah Anda yakin ingin keluar?');">Keluar</a></li>
                     </ul>
                 </span>
             </div>
